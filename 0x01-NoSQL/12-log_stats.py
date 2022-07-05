@@ -17,6 +17,6 @@ if __name__ == "__main__":
 
 
     print("{} logs".format(get_total))
-    print("Methods:\n\tmethod GET: {}\n\tmethod POST: {}\n\tmethod PUT: {}\n\tmethod PATCH: {}\n\tmethod DELETE: {}\n{} status check".format(
-                  get_get, get_post, get_put, get_patch, get_delete,
-                  get_status))
+    print("Methods:\n\tmethod GET: {}\n\tmethod POST: {}\n\tmethod PUT: {}\n\tmethod PATCH: {}\n\tmethod DELETE: {}".format(
+                  get_get, get_post, get_put, get_patch, get_delete))
+    print("{} status check".format(get_status))
