@@ -20,3 +20,11 @@ print("Methods:\n\tmethod GET: {}\n\tmethod POST: {}\n\tmethod PUT\
 : {}\n\tmethod PATCH: {}\n\tmethod DELETE: {}\n{} status \
 check".format(get_get, get_post, get_put,
               get_patch, get_delete, get_status))
+
+def nothing():
+    """ Does nothing"""
+    pass
+
+def do_not():
+    """ Do nothing as well """
+    pass

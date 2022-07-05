@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Provides stats about Nginx logs restored in mongoDB"""
+""" Provides stats about Nginx logs restored in mongoDB """
 import pymongo as pm
 db = pm.MongoClient()
 mydb = db["logs"]
@@ -31,3 +31,11 @@ for top in IPs:
     count = top.get("count")
     ip_address = top.get("ip")
     print("\t{}: {}".format(ip_address, count))
+
+def nothing():
+    """ Does nothing"""
+    pass
+
+def do_not():
+    """ Do nothing as well """
+    pass
