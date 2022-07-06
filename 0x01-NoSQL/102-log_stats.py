@@ -9,7 +9,7 @@ mycol = mydb["nginx"]
 if __name__ == "__main__":
     get_get = mycol.count_documents({"method": "GET"})
     get_post = mycol.count_documents({"method": "POST"})
-    get_put = mycol.count_documents({"methods": "PUT"})
+    get_put = mycol.count_documents({"method": "PUT"})
     get_patch = mycol.count_documents({"method": "PATCH"})
     get_delete = mycol.count_documents({"method": "DELETE"})
     get_total = mycol.count_documents({})
