@@ -23,8 +23,8 @@ def call_history(method: Callable) -> Callable:
     def history(self, *args) -> Any:
         """Prints the output of a method after storing the inputs and output.
         """
-        k_in = '{}:inputs'.format(method.__qualname__)
-        k_out = '{}:outputs'.format(method.__qualname__)
+        k_in = "{}:inputs".format(method.__qualname__)
+        k_out = "{}:outputs".format(method.__qualname__)
         if isinstance(self._redis, r.Redis):
             self._redis.lpush(k_in, str(args))
         output = method(self, *args)
@@ -32,6 +32,30 @@ def call_history(method: Callable) -> Callable:
             self._redis.lpush(k_out, output)
         return output
     return history
+
+
+def replay(fn: Callable) -> None:
+    """Shows the call history of a Cache instance"""
+    if fn is None or not hasattr(fn, "__self__"):
+        return
+    redis_store = getattr(fn.__self__, "_redis", None)
+    if not isinstance(redis_store, r.Redis):
+        return
+    fxn_name = fn.__qualname__
+    in_key = "{}:inputs".format(fxn_name)
+    out_key = "{}:outputs".format(fxn_name)
+    fxn_call_count = 0
+    if redis_store.exists(fxn_name) != 0:
+        fxn_call_count = int(redis_store.get(fxn_name))
+    print("{} was called {} times:".format(fxn_name, fxn_call_count))
+    fxn_inputs = redis_store.lrange(in_key, 0, -1)
+    fxn_outputs = redis_store.lrange(out_key, 0, -1)
+    for fxn_input, fxn_output in zip(fxn_inputs, fxn_outputs):
+        print("{}(*{}) -> {}".format(
+            fxn_name,
+            str(fxn_input),
+            fxn_output,
+        ))
 
 
 class Cache:
