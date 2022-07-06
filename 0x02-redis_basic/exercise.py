@@ -17,6 +17,23 @@ def count_calls(method: Callable) -> Callable:
     return call
 
 
+def call_history(method: Callable) -> Callable:
+    """Records the call details of a method in Cache """
+    @wraps(method)
+    def history(self, *args) -> Any:
+        """Prints the output of a method after storing the inputs and output.
+        """
+        k_in = '{}:inputs'.format(method.__qualname__)
+        k_out = '{}:outputs'.format(method.__qualname__)
+        if isinstance(self._redis, r.Redis):
+            self._redis.lpush(k_in, str(args))
+        output = method(self, *args)
+        if isinstance(self._redis, r.Redis):
+            self._redis.lpush(k_out, output)
+        return output
+    return history
+
+
 class Cache:
     """Cache class"""
     def __init__(self) -> None:
@@ -24,6 +41,7 @@ class Cache:
         self._redis = r.Redis()
         self._redis.flushdb(True)
 
+    @call_history
     @count_calls
     def store(self, data: Union[bytes, float, int, str]) -> str:
         """Stores data in redis and returns the key"""
