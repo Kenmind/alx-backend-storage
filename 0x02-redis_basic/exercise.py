@@ -60,21 +60,21 @@ def replay(fn: Callable) -> None:
 
 class Cache:
     """Cache class"""
-    def __init__(self) -> None:
+    def __init__(self: r.Redis) -> None:
         """ Initializes cache"""
         self._redis = r.Redis()
         self._redis.flushdb(True)
 
     @call_history
     @count_calls
-    def store(self, data: Union[bytes, float, int, str]) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """Stores data in redis and returns the key"""
         key = str(uuid.uuid1())
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Callable = None) -> Union[bytes,
-                                                          float, int, str]:
+    def get(self, key: str, fn: Callable = None) -> Union[str,
+                                                          bytes, int, float]:
         """ Converts data back to the desired format """
         d_key = self._redis.get(key)
         if fn is not None:
